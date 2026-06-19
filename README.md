@@ -2,7 +2,7 @@
 IDX Exchange 2026 Data Science Internship Project
 
 ## Author
-Vivian Nguyen
+Vivian Nguyen (ds49)
 
 ## Project Prompt
 Predicting California Property Close Price (Final Sales)
