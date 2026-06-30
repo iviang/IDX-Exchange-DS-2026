@@ -328,10 +328,31 @@ df.isnull().sum()
 
 ### Reflection
 
-Previously focused only on the seven required variables.
-Examining missing values across the entire dataset will provide more context for preprocessing and identifying relationships between missingness and other variables.
+Previously focused only on the seven required variables of raw counts. Examining missing values across the entire dataset will provide more context for preprocessing and identifying relationships between missingness and other variables. It would additionally be easier to take the values head on through percentages, also to organize by severity of missingness.
 
 ### Revision
 
-Continue evaluating missing data across the complete dataset during Week 3 preprocessing.
+- Checking for duplicates through the whole dataframe
+    - 33 duplicates found through shared ListingKey values
+        - Common pattern: commmon ClosePrice, different CloseDates 
+- Implementing sorting by percentage of missing values
+- bar chart visualization of missing values by percentages with a legend organized by severity of missingness (90-100% missing, 51-89% missing, 10–50% missing, < 10% missing)\
+- Variables with 100% missing values
+    - BusinessType
+    - CoveredSpaces
+    - MiddleOrJuniorSchoolDistrict
+    - FireplacesTotal
+    - TaxAnnualAmount
+    - AboveGradeFinishedArea
+    - TaxYear
+    - ElementarySchoolDistrict
 
+--- 
+## Focused Variables
+
+### Original Implementation
+Originally this section was implemented through the loading of the .csv files directly organized with 'usecols'
+
+### Reflection
+
+### Revision
