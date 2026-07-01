@@ -355,4 +355,29 @@ Originally this section was implemented through the loading of the .csv files di
 
 ### Reflection
 
+- This is a new section but it essentially narrows the datagrame down to the 7 key columns previously defined.
+- From here, visualizations are focused on the required variables and will demonstrate clearer trends across the 6 months
+
 ### Revision
+
+- new variables: key_vars, key_df
+- Outliers are checked in a more organized way where the individual distribution sections don't need theri own outlier check.
+- re-checking null values in the key_vars for a closer look
+
+---
+## Exploring Distributions
+
+### Original Implementation
+- I had implemented a histogram of each key_Vars and the ones with extreme outliers I had restricted the histogram range according to the 995h percentile data of the variable(s).
+### Reflection
+
+This section is the core of the week 2 task, looking into the dataframe to explore the distribution and trends of the previously highlighted 7 variables, across the span of 6 years.
+
+### Revision
+
+- new variables: key_vars, key_df
+- add log-scale distributions
+- involving stronger result analyses
+- looking into seasonality
+
+---
