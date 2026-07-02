@@ -363,6 +363,8 @@ Originally this section was implemented through the loading of the .csv files di
 - new variables: key_vars, key_df
 - Outliers are checked in a more organized way where the individual distribution sections don't need theri own outlier check.
 - re-checking null values in the key_vars for a closer look
+- Expanded percentiles
+- Assessing for skewedness in any of the variables
 
 ---
 ## Exploring Distributions
