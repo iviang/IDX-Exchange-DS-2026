@@ -371,6 +371,7 @@ Originally this section was implemented through the loading of the .csv files di
 
 ### Original Implementation
 - I had implemented a histogram of each key_Vars and the ones with extreme outliers I had restricted the histogram range according to the 995h percentile data of the variable(s).
+
 ### Reflection
 
 This section is the core of the week 2 task, looking into the dataframe to explore the distribution and trends of the previously highlighted 7 variables, across the span of 6 years.
@@ -383,3 +384,7 @@ This section is the core of the week 2 task, looking into the dataframe to explo
 - looking into seasonality
 
 ---
+
+## Relationships with ClosePrice Scatter Plots
+
+This is a new section in which I positioned ClosePrice as the target variable by comparing it to the other variables to determine strength of predictability in the relationships.
