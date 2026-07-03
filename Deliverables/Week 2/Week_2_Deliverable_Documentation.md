@@ -388,3 +388,12 @@ This section is the core of the week 2 task, looking into the dataframe to explo
 ## Relationships with ClosePrice Scatter Plots
 
 This is a new section in which I positioned ClosePrice as the target variable by comparing it to the other variables to determine strength of predictability in the relationships.
+
+- I did the correlation ranking through Spearman method and a heatmap via Pearson methods.
+- The two methods were compared to ensure validity of predictability strength with ClosePrice.
+
+---
+
+## Final Summary
+
+Reviewing the highlights of the EDA and considering next steps for Week 3's preprocessing.
