@@ -290,29 +290,29 @@ Matthew
 * test fixed may 2026, standard scaler since the first model will be linear regression
 * sample training data
 
-Anvith's EDA:
+Anvith's EDA: * insightful
 * feature engineering
 (price per square foot) distribution
     - lot more data on the left fide of the median
    looking by county
    look at Anvith's 
-* march - may tend to be the hot season for selling homes (Seasonality trend)
+* march - may tends to be the hot season for selling homes (Seasonality trend)
 * association fee
 * bedroom bathroom join distribution
 
 Shashank
-* dealing weith nulls (filling with medians, multiple ideas)
+* dealing with nulls (filling with medians, multiple ideas)
 * datetime
 * used the last month
 * set up for next weeks task
 * did two files
-    - sanity checks ( lat and longitude )
+    - sanity checks ( lat and longitude check )
     - daysonmarket
-    - listingcontract date cant be later than code date
+    - listingcontract date cant be later than code date 
     - ensuring numeric types
 
 Soyeon
-* sourcefile colum
+* sourcefile column
 *  checking missingness and invalids from EDA rerun
 * filter project scope and target
     - date parsing
