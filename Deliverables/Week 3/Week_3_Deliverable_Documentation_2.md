@@ -279,3 +279,56 @@ Preventing Data Leakage
 
 # 6. Meeting Notes/Thoughts (07/06/2026)
 
+Matthew
+* looking at the ammenities
+* missingness 
+* removing impossible values
+* percentile filters
+* print out distribution of bedroom and bathroom totals to ensure extreme values
+* missing values into unknown (amentity flags)
+* log transformations
+* test fixed may 2026, standard scaler since the first model will be linear regression
+* sample training data
+
+Anvith's EDA:
+* feature engineering
+(price per square foot) distribution
+    - lot more data on the left fide of the median
+   looking by county
+   look at Anvith's 
+* march - may tend to be the hot season for selling homes (Seasonality trend)
+* association fee
+* bedroom bathroom join distribution
+
+Shashank
+* dealing weith nulls (filling with medians, multiple ideas)
+* datetime
+* used the last month
+* set up for next weeks task
+* did two files
+    - sanity checks ( lat and longitude )
+    - daysonmarket
+    - listingcontract date cant be later than code date
+    - ensuring numeric types
+
+Soyeon
+* sourcefile colum
+*  checking missingness and invalids from EDA rerun
+* filter project scope and target
+    - date parsing
+* dedup listings of listing key
+    - also got 33
+    - kept the recent entries
+* numeric values
+    - impossible values => NaN
+    - boolean all into 1 and 0 
+    - missing values => missing flag
+* basic cleaning, saved the file first
+* then time based split
+    - most recent month used as training data
+* did a preprocessing template
+    - numeric scaling
+    - pipeline
+
+
+
