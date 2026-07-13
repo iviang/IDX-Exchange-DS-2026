@@ -330,5 +330,7 @@ Soyeon
     - numeric scaling
     - pipeline
 
+# 7 Revisions
 
+- Flag out of bounds / impossible price-per-sqft for propterties
 
