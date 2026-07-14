@@ -1,0 +1,221 @@
+# Week 4 Deliverable Workflow Log
+**Author:** Vivian Nguyen
+---
+
+Notebook: `03_baseline_model.ipynb`
+Input: cleaned CSV (../../data/cleaned_CRMLSSold202512_202605.csv) developed from `02_preprocessing.ipynb` (NOT uploaded to github)
+Deliverable: Linear Regression baseline evaluated with R² on the test set
+
+# 1. Objective
+Establishing a baseline model using linear regression and to record proper results, setting up for Week 5 task.
+
+## Task Requirements
+- Train a Linear Regression as the first model.
+- Evaluate using R² on the test set.
+- Record baseline results.
+- Deliverable: 03_baseline_model.ipynb
+
+---
+
+# 2. Procedure
+
+## Environment 
+- input is the cleaned .csv as output of 02_prcoessing.ipynb
+- parameters:
+    - most recent month as required by task doc (052026)
+    - Train Months precede the test month 
+- All tunable values live at the top of the notebook: `TEST_MONTH` (2026-05), `TRAIN_MONTHS` , paths, column names
+
+## Pipeline Order
+
+1. Load & sanity checks
+2. Chronological train/test split
+3. Market drift check
+4. Feature selection (guards against leakage)
+5. Split into X/y + standardization
+6. Fit two baseline variants (raw + log target)
+7. Evaluate R_2
+8. Coefficient interpretation
+9. Residual diagnostics and audit
+10. Training window sweep (X = 1–5)
+11. Results
+
+---
+
+## Split & Drift Check
+
+- chrono_split(df) with X = 5, test = May 2026 (fixed)
+- Median ClosePrice climbs Dec-->May
+    - expectation registered before modeling: 
+        - training months are cheaper than the test month, so the model will likely underpredict May
+
+---
+
+## Feature Selection
+
+- 66 features used of the 77 cleaned columns; exclusions documented inline:
+    - Target + its log + `ClosePrice_repaired` (metadata)
+    - identifiers/date columns (`ListingKey`, `CloseDate`, `CloseMonth`)
+    - raw versions where the log is used (`LivingArea`, `LotSizeAcres`)
+    - `PostalCode` (raw reference only, per Week 3), `CountyOrParish` (replaced by dummies)
+    - `County_Los_Angeles` dropped as the dummy reference (largest county by sales)
+- Asserts check what the model depends on: 
+    - no `ClosePrice`derived column in features
+    - no NaNs in the matrix
+
+---
+
+## Baseline Variants
+- Two linear regressions on identical features:
+    - raw `ClosePrice`
+    - `log(ClosePrice)`, predictions back-transformed via `np.exp`
+        - both evaluated in dollar space so R² is comparable
+- Prediction-distribution histogram + impossible-floor check:
+    - raw model min prediction −$821,582 (impossible; a negative sale)
+    - log model min prediction $119,294 (structurally positive)  
+
+---
+
+## Residual Diagnostics (& Data-Quality Discovery)
+
+- Predicted-vs-actual and residual plots dominated by the more expensive costs (producing skew); zoomed (<$5M) versions added for the bulk of the market
+- The single largest test residual (~$96M) traced to a recorded $97.97M sale
+    - 2,254 sqft, 4bd/3ba, Oceanside --> ~$43,500/sqft (several times beyond any verified CA sale)
+    - second suspect: $48.72M for 1,800 sqft, 3bd/2ba, Encinitas --> ~$27,100/sqft
+- Verified against the raw CRMLS extract:
+    - ListingKey 1152020272: 
+    $97,972,500 close vs $975,000 list --> ×100 unit error (true $979,725, ratio 1.005)
+    - ListingKey 1154925192: $48,720,000 close vs $5,150,000 list --> ×10 unit error (true $4,872,000, ratio 0.946)
+- Why Week 3's cleaning screen missed them:
+    - inspection was bounds-only [$10K, $100M]
+        - both rows sat under the ceiling, so they continued uninspected
+    - `FACTORS` contained neither ÷10 nor ÷100, so the correct repair hypotheses didn't exist to be tested
+- Fix applied in `02_preprocessing.ipynb`:
+    - $/sqft plausibility screen (> $15,000/sqft) union-ed with the bounds screen
+        - ceiling ~2× above any verified CA residential sale; escapees sat at $27K and $43K
+        - rows missing LivingArea can't be evaluated by this screen (documented limitation; handled later in missing values)
+    - `FACTORS` extended to `[1, 1e-3, 1e-2, 1e-1, 1e3, 1e6]` — additions are the two proven error magnitudes
+- Verdict stability under the wider screen: all 11 original rows kept identical verdicts; new totals 13 inspected / 10 repaired / 1 kept / 2 dropped
+    - row count unchanged at 61,604 — two rows converted from "kept corrupt" to "repaired", nothing added or removed
+- `03` re-run end-to-end on the regenerated CSV; no modeling code changed
+
+## Week 3 Carry-Over Audit
+
+- Fired for the first time: 2 repaired rows landed in the test month
+- Exposed a latent indexing bug in its own body (numpy prediction array indexed with df labels)
+    - fixed via `test_df.index.get_indexer(...)`
+    - lesson: an `if` body that has never executed is untested code
+- Audit rows split into the two archetypes:
+    - Encinitas: $4.87M actual, $1.05M predicted (−$3.8M) — the luxury blindspot in one row; county dummies can't see coastal-premium location
+    - Oceanside: $980K actual, $1.30M predicted (+$320K) — ordinary single-row error
+
+---
+
+## Training Window Sweep
+
+- X = 1–5 swept, fixed May test; per-window scaler refit on that window's train only
+    - reusing the X=5 scaler on smaller windows would leak cross-window statistics
+- Consistency check: X=5 row reproduces the Evaluate table to the 4th decimal
+
+---
+
+# 3. Findings
+
+- R² (dollar space), corrected data:
+    - raw: train 0.4477 / test 0.4685 / gap −0.0208
+    - log: train 0.5425 / test 0.5071 / gap 0.0353
+    - **log(ClosePrice) is the Week 5 default; test R² 0.5071 is the number to beat**
+- Impact of the two repaired rows (before --> after, log): test R² 0.33 --> 0.5071
+    - 2 of 12,007 test rows were suppressing test R² by ~0.17
+- Corrected conclusion: the train-test gap originally attributed to market drift was driven almost entirely by the two corrupt test rows
+    - drift is real (by-month training residuals climb ~$32K Jan-->Apr; ~9% median rise) but its aggregate effect on test R² is minor (corrected gap 0.035)
+    - train R² unchanged by the revision (both rows were in the test month) — coefficients and their interpretation survive untouched
+- Negative raw gap (−0.02) unremarkable: train spans five drifting months, test is one
+- Window sweep: log spread 0.008 total across X=1–5 (inside single-test-month noise); raw rises mildly with volume (0.4561 --> 0.4685)
+    - 4× more training data ≈ no gain --> baseline is bias-limited, not data-limited
+    - X = 5 kept (no penalty, maximum data); conclusion is model-specific — re-test with Week 5 models
+- Largest residuals post-cleanup belong to genuine $20–35M luxury sales (top of test set: $35M/$31M/$28M/$24M/$22.5M, all coherent: 5,000–12,600 sqft, 5–12 baths, LA/SD)
+    - the luxury blindspot is real; its former poster child ($98M) was not
+
+---
+
+# 4. Next Steps
+
+- comparing with team
+- Week 5: Decision Tree + Random Forest vs the 0.5071 baseline
+    - re-run the window sweep with tree models (linear-baseline insensitivity may not transfer)
+    - luxury tail and within-county location are the known gaps --> Week 6 geographic features (school districts)
+- Revisit `YearBuilt` / `PostalCode` target encoding if models underperform (carried from Week 3)
+
+---
+
+# 5. Tools and Resources
+
+- VS Code
+- Jupyter Notebook
+- Python 3.13.14
+- pandas, numpy, scikit-learn, matplotlib, seaborn
+- GitHub (raw and cleaned data excluded via .gitignore)
+
+---
+
+# 6. Meeting Notes/Thoughts
+
+- Zahi
+    - used all the data larger dataset
+    - started with preprocessing since was absent last week
+        - converted missing values
+        - dropped sparse columns
+        - missingness between counties
+        - KNN
+    - 51% = R^2 value
+- Mario
+    - used 6 months
+    - started with preprocessing since was absent
+    - clipped percentiles
+    - median for numeric categories
+    - encoded and non encoded version
+    - 3 cleaned
+    - only used numeric features
+- Matthew
+    - train test function reuse
+    - used latest month
+    - and past 6 months as training model
+    - standardized columns used
+    - feature importance due to standardizing the variables
+    - R^2 = 0.71
+- Anvith
+    - went through preprocessing again
+        - dropped 18 fields
+    - re-read process document under his folder
+    - R^2 of 47%
+    - random pattern in scatter
+    - extended preprocessing in feature engineering vars that dont appear in the baseline
+    - bathrooms had highest correlation
+- Shashank
+    - optimal values for teset set check
+    - 24 months is best X month 
+    - thinks model is overfitted
+    - R^2 = 0.62
+    - fencing off outliers in data
+    - work in progress
+- soyeon
+    - same model features from preprocessing
+    - seprated by type columns
+    - built individual preprocessing pipeline on training data
+    - define outlier of closeprice
+    - applied bounds to the training set
+    - used the same 5 months evaluation window
+    - expanded training months beyond the 5 months
+    - stable fixed window rolling origin of R^2
+    - for the final baseline used dec 2025 - april 2026
+    - R^2 = 0.832 **(Highest value out of all of us)**
+    - did a final test residual distribution
+
+---
+
+# 7. Revisions
+
+- `02_preprocessing.ipynb` revised mid-week (see Residual Diagnostics section): $/sqft plausibility screen + extended factor set; cleaned CSV regenerated; `03` re-run end-to-end
+    - closes the revision stub logged in the Week 3 doc ("Flag out of bounds / impossible price-per-sqft for properties")
+- look at soyeon's method
