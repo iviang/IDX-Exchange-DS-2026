@@ -219,3 +219,17 @@ Establishing a baseline model using linear regression and to record proper resul
 - `02_preprocessing.ipynb` revised mid-week (see Residual Diagnostics section): $/sqft plausibility screen + extended factor set; cleaned CSV regenerated; `03` re-run end-to-end
     - closes the revision stub logged in the Week 3 doc ("Flag out of bounds / impossible price-per-sqft for properties")
 - look at soyeon's method
+    - I wanted to investigate the differences between the models using a trimmed-test-set experiment
+    - Soyeon's pipeline (highest R², 0.832) evaluates on test rows inside train-derived 0.5th/99.5th percentile ClosePrice bounds
+    - experiment: re-scored my existing predictions under her evaluation rule with bounds derived from my own training set (method replicated)
+    - my train-derived bounds: $185K – $9.09M 
+        - Soyeon: $185K – $9.25M a similar range
+    - test set: 
+        - 12,007 --> 11,905 rows
+    - results: 
+        - raw 0.4685 --> 0.5050 trimmed
+        - log 0.5071 --> 0.5985 trimmed
+    - Summary: Still have a 0.325 gap to Soyeon's 0.832 value for R^2
+        - Soyeon's model has more refined location features
+            - validates the need of the Week 6 geographic layer plan before running it
+        - Expect the results of the upcoming tasks to help refine the pipeline and strengthen the R^2 value
