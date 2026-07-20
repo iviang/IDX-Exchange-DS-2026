@@ -1,0 +1,7 @@
+week,model,version,target,train_months,test_month,n_features,train_r2,test_r2,change_note
+5,LinearRegression,baseline,log(ClosePrice),5,2026-05,66,0.5425,0.5071,Week 4 baseline refit as reference
+5,DecisionTree,A-log,log(ClosePrice),5,2026-05,66,0.9986,0.137,"unconstrained defaults, log target"
+5,DecisionTree,A-raw,raw ClosePrice,5,2026-05,66,0.9989,0.1347,"unconstrained defaults, raw target"
+5,DecisionTree,B-depth,log(ClosePrice),5,2026-05,66,0.5202,0.4976,"max_depth=6 chosen from sweep [4, 6, 8, 10, 12, 16, 20], log target"
+5,RandomForest,A-default,log(ClosePrice),5,2026-05,66,0.9039,0.5939,"unconstrained defaults = 100 trees, log target"
+5,RandomForest,B-leaf5,log(ClosePrice),5,2026-05,66,0.7166,0.6043,"100 trees, min_samples_leaf=5, log target"
