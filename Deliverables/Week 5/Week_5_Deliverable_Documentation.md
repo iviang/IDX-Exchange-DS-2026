@@ -152,7 +152,66 @@ Every named experiment logged to `results/model_results.csv` for easier access l
 
 # 6. Meeting Notes/Thoughts
 
-- 
+- Mario:
+    - expanded feature set
+    - random forest was the best
+    - least decision tree
+    - RF yield train R^2
+    - almost all models beat baseline
+    - bar graph between the models
+    - linear regression looked pretty good but RF was the best
+    - baseline + location features
+    - did feature importance for the random forest
+    - Rf: 0.79
+- Zahi:
+    - edited baseline
+    - 0.8747
+- Matthew:
+    - location features (lat/long)
+    - RF R^2: 0.91
+    - diagnostics of both models
+    - Residual distribution
+- Anvith:
+    - same set up
+    - DTA modest max_depth
+        - performance: DTA. 0.67
+        - feature importance graph
+        - visual of the decision tree
+    - RF R^2: 0.8227
+        - did estimators of 200
+        - RF feature importance
+
+    - did overfit check bar graph
+    - (soyeon did a rolling test/train which was why it was so good)
+- Shashank
+    - RF looks a lot better
+    - DT did not do as well
+    - log close price looks worse 
+    - residuals and actual vs predicted diagnostics
+    - RF R^2: 0.877
+- Soyeon
+    - applied suggestions to preprocessing => baseline changed a bit
+    - train Decision tree and RF
+        - clean process
+    - hyperparameter tuning helps best
+    - RF R^2: 0.84
+
+Next Steps:
+
+- We can all agree that RF performs the best model
+- I can revise my values to cover the overfitting and do more hyperparameter tuning
+- turn findings into a more organize sentence structures
+- reformat findings
+- add more location features to support linear model 
+- feature importance graph for each model
+- everything looks like its overfitting
+    - revise, look at everyone else's method
+- look at more hyperparams
+
+Feature engineering talk:
+- age of property
+- season?
+- zahi will send videos 
 
 ---
 
