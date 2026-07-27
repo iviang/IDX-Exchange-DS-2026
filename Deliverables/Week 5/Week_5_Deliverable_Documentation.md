@@ -217,4 +217,37 @@ Feature engineering talk:
 
 # 7. Revisions
 
-- 
+- went all the way back to preprocessing to implement latitude and longitude
+    - improves the results of the tree modeling
+    - sets up for week 6
+
+- Updated procedures/recap of steps: 
+    - **Target:** log(ClosePrice), fit in log space, back-transformed via `np.exp` before scoring (handles the right-skewed price dist). Raw-target variants logged for comparison only.
+    - **Metric:** R² in dollar space 
+        - same scale as the baseline. (Week 8 adds MAPE / MdAPE.)
+    - **Split:** fixed chronological, no shuffling → mirrors forward prediction. Test June 2026; train the 11 preceding months (Jul 2025 → May 2026), capped to match 03.
+    - **Features:** same 73-feature matrix as the Week 4 baseline; `County_Los_Angeles` is the reference category (dropped); Latitude/Longitude included.
+    - **Reproducibility:** `random_state=42` on every tree/forest; Restart & Run All.
+    - **Logging:** one row per named experiment in `model_results.csv`
+        - sweeps stay in the notebook, only the chosen config is logged.
+
+- **Decision Tree**
+    - DT.A
+        - unconstrained defaults; overfits (train ≈ 1.0) but still clears baseline
+    - DT.B 
+        - `max_depth` sweep; best = 16 (test 0.698)
+    - DT.C 
+        - `min_samples_leaf=5`; best single tree (test 0.709), logged; still below every forest
+
+- **Random Forest** (100 trees, `n_jobs=-1`)
+    - RF.A 
+        - unconstrained defaults; best log model (test 0.775)
+    - RF.B 
+        - `min_samples_leaf=5`, chosen from a leaf sweep [1,5,10,20,50] as the point of diminishing returns; lower test than RF.A (0.754) but half the gap (0.093 vs 0.173)
+    - RF.C 
+        - GridSearchCV over min_samples_leaf/max_features with TimeSeriesSplit(4); "best" params ≈ defaults → ties RF.A, confirming RF is near its ceiling on this feature set
+    - Depth sweep: best depth = None reproduces RF.A
+        - forest doesn't need depth-capping
+    - Bagging over many trees is the mechanism that fixes the single-tree variance problem
+
+- Newest results: RF.A-raw 0.788 > RF.A-log 0.775 > RF C-tuned 0.772 > RF.B 0.754 > DT.C-leaf5 0.709 > DT.B 0.698 > DT.A-log 0.679 > DT.A-raw 0.652 > baseline 0.562
