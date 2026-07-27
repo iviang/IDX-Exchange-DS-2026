@@ -8,3 +8,4 @@ week,model,version,target,train_months,test_month,n_features,train_r2,test_r2,ch
 5,RandomForest,A-raw,raw ClosePrice,11,2026-06,73,0.9681,0.7882,"unconstrained defaults, raw target"
 5,RandomForest,B-leaf5,log(ClosePrice),11,2026-06,73,0.8474,0.7543,"100 trees, min_samples_leaf=5, log target"
 5,RandomForest,C-tuned,log(ClosePrice),11,2026-06,73,0.9099,0.7717,"GridSearchCV/TimeSeriesSplit(4), LOG target, best={'max_features': 1.0, 'min_samples_leaf': 2}, n_estimators=200"
+5,RandomForest,SchoolDistrict,log(ClosePrice),11,2026-06,73,0.9494,0.7806,RF + 363 school-district one-hots (no engineered)
