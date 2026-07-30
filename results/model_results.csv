@@ -1,2 +1,13 @@
 week,model,version,target,train_months,test_month,n_features,train_r2,test_r2,change_note
 4,LinearRegression,baseline,raw(ClosePrice),11,2026-06,73,0.6093,0.6172,"canonical baseline: raw-linear, dollar R^2, train 1/99 trimmed test"
+5,DecisionTree,A-log,log(ClosePrice),11,2026-06,73,0.9999,0.7808,"unconstrained defaults, log target"
+5,DecisionTree,A-raw,raw ClosePrice,11,2026-06,73,0.9999,0.7751,"unconstrained defaults, raw target"
+5,DecisionTree,B-depth,log(ClosePrice),11,2026-06,73,0.9494,0.7956,"max_depth=16 chosen from sweep [4, 6, 8, 10, 12, 16, 20], log target"
+5,DecisionTree,C-leaf5,log(ClosePrice),11,2026-06,73,0.9413,0.8115,"min_samples_leaf=5, log target"
+5,RandomForest,A-log,log(ClosePrice),11,2026-06,73,0.9802,0.8718,"unconstrained defaults = 100 trees, log target"
+5,RandomForest,A-raw,raw ClosePrice,11,2026-06,73,0.9831,0.8729,"unconstrained defaults, raw target"
+5,RandomForest,B-leaf5,log(ClosePrice),11,2026-06,73,0.9402,0.8662,"100 trees, min_samples_leaf=5, log target"
+5,RandomForest,C-tuned,log(ClosePrice),11,2026-06,73,0.9727,0.8728,"GridSearchCV/TimeSeriesSplit(4), LOG target, best={'max_features': 1.0, 'min_samples_leaf': 2}, n_estimators=200"
+6,RandomForest,A+SchoolDistrict,log(ClosePrice),11,2026-06,435,0.9835,0.8792,RF + School District
+6,RandomForest,A+FE,log(ClosePrice),11,2026-06,76,0.983,0.8714,RF + engineered ratios
+6,RandomForest,A+FE+SchoolDistrict,log(ClosePrice),11,2026-06,438,0.9834,0.8772,RF + engineered + district
