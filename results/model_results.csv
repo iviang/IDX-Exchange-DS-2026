@@ -14,5 +14,5 @@ week,model,version,target,train_months,test_month,n_features,train_r2,test_r2,ch
 7,LightGBM,A,raw(ClosePrice),11,2026-06,1185,0.922,0.8889,"defaults: 400 trees, lr=0.05, num_leaves=63, raw target"
 7,LightGBM,B-tuned,raw(ClosePrice),11,2026-06,1185,0.9501,0.897,"month-blocked(4) tuned, best={'learning_rate': 0.15, 'n_estimators': 1200, 'num_leaves': 31}, raw target"
 7,XGBoost,A,raw(ClosePrice),11,2026-06,1185,0.9015,0.8676,"defaults: 600 trees, lr=0.05, max_depth=6, hist, raw target"
-7,CatBoost,A-native,raw(ClosePrice),11,2026-06,22,0.9001,0.8813,"native cat (['PostalCode', 'City', 'CountyOrParish', 'SchoolDistrict']), 1000 trees, lr=0.05, depth=6, raw target"
 7,CatBoost,B-tuned,raw(ClosePrice),11,2026-06,22,0.9211,0.8936,"native, randomized(depth/lr/l2), 30000-row search + full refit, ES@1667, best={'depth': 5, 'l2_leaf_reg': np.float64(3.5077042112439023), 'learning_rate': np.float64(0.1182998158400237)}"
+7,CatBoost,A,raw(ClosePrice),11,2026-06,22,0.9001,0.8813,"native cat (['PostalCode', 'City', 'CountyOrParish', 'SchoolDistrict']), 1000 trees, lr=0.05, depth=6, raw target"
