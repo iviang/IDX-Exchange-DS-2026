@@ -17,3 +17,7 @@ week,model,version,target,train_months,test_month,n_features,train_r2,test_r2,ch
 7,XGBoost,B-tuned,raw(ClosePrice),11,2026-06,1185,0.9551,0.8981,"randomized(12)+ES@1999, best={'colsample_bytree': np.float64(0.8199582915145766), 'learning_rate': np.float64(0.03559987958563385), 'max_depth': 8, 'min_child_weight': 3, 'subsample': np.float64(0.8147385973801488)}, hist, raw target"
 7,CatBoost,A,raw(ClosePrice),11,2026-06,22,0.9001,0.8813,"native cat (['PostalCode', 'City', 'CountyOrParish', 'SchoolDistrict']), 1000 trees, lr=0.05, depth=6, raw target"
 7,CatBoost,B-tuned,raw(ClosePrice),11,2026-06,22,0.9211,0.8936,"native, randomized(depth/lr/l2), 30000-row search + full refit, ES@1667, best={'depth': 5, 'l2_leaf_reg': np.float64(3.5077042112439023), 'learning_rate': np.float64(0.1182998158400237)}"
+7,LightGBM,B-tuned+district,raw(ClosePrice),11,2026-06,1547,0.9506,0.8989,tuned params on og+district (ablation best config)
+7,XGBoost,B-tuned+district,raw(ClosePrice),11,2026-06,1547,0.9564,0.9008,tuned params on og+district (ablation best config)
+7,Ensemble,blend-tuned,raw(ClosePrice),11,2026-06,1547,0.9465,0.9043,"weighted blend (lgb,xgb,cat)=(np.float64(0.35), np.float64(0.25), np.float64(0.4)) on +district, weights fit on May val only"
+7,Ensemble,stack-ridge,raw(ClosePrice),11,2026-06,1547,0.946,0.9064,"Ridge meta on May val preds, +district base, coefs=[0.358 0.267 0.412]"
