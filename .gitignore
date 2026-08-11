@@ -1,1 +1,7 @@
 data/
+models/week5_6_trees.joblib
+models/week7_models.joblib
+Deliverables/Week 7/catboost_info/catboost_training.json
+*.tsv
+Deliverables/Week 7/catboost_info/test/events.out.tfevents
+Deliverables/Week 7/catboost_info/learn/events.out.tfevents
