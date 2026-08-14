@@ -3,4 +3,5 @@ data/
 Deliverables/Week 7/catboost_info/test/events.out.tfevents
 Deliverables/Week 7/catboost_info/learn/events.out.tfevents
 Deliverables/Week 8/catboost_info/catboost_training.json
-models/
+models/*
+!models/week8_log_models.joblib
