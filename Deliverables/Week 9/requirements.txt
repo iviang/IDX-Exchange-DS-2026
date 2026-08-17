@@ -5,3 +5,5 @@ scikit-learn
 lightgbm
 joblib
 geopy #v2
+xgboost #v3
+catboost #v3
