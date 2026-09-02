@@ -85,24 +85,36 @@ All most updated models and results reviewable at: <../results/**model_results.c
 
 ## Best Results
 
-**Mid-market (1/99-trimmed test): Ridge Stack ensemble**
+Best results of this repository derived two models that specialize in different markets.
+For the typical single family residence property at mid-market, the strongest result comes from Ensemble Stack-Ridge, which reports 90.6% accuracy in ClosePrice predictions, scored on only the 1st-99th percentile of the test-set's close prices. Outlier sales are not factored in.
+To achieve prediction more accurately on the whole test-set with a focus the luxury tail accuracy, LightGBM, tuned factoring in the School District geographical layer, shows the highest accuracy at 82% through the log target of ClosePrice. 
 
-| Metric | Value |
-|---|---|
-| Test R² | **0.9064** |
-| MAE | $146,915 |
-| RMSE | $269,628 |
-| MdAPE | ~8.0% (best MdAPE overall: RandomForest A-log, 7.86%) |
+**Mid-market (1st–99th percentile trimmed test-set):** 
 
-**Full market INCLUDING the luxury tail (untrimmed test): LightGBM, log target**
+| Model | Feature Set | Target | R^2 | MAE | RMSE | MdAPE | 
+|---|---|---|---|---|---|---|
+| **Ensemble (stack-ridge)** | tuned base models +District | raw | **0.9064** | $146,915 | $269,628 | 7.93% |
+| XGBoost (B-tuned+district)| tuned +District | raw | 0.9008 | $151,510 | $277,504 | 8.48% |
+| LightGBM (B-tuned+district)| tuned +District | raw | 0.8989 | $152,157 | $280,176 | 8.42% |
+| CatBoost (B-tuned)| tuned, native cats | raw | 0.8936 | $157,355 | $287,343 | 8.65% |
+| RandomForest (A+SchoolDistrict)| base +District | raw | 0.8814 | $158,375 | $303,464 | 7.88% |
+| **LinearRegression (baseline)** | base | raw | **0.8152** | $235,407 | $378,752 | 15.65% |
+| DecisionTree (C-leaf5)| base, constrained min_samples_leaf | raw | 0.8143 | $201,957 | $379,727 | 10.18% |
 
-| Metric | Value |
-|---|---|
-| R² | **0.8200** |
-| MAE | $191,651 |
-| RMSE | $651,556 |
-| MAPE | 12.45% |
-| MdAPE | 8.06% |
+
+**Full market INCLUDING the luxury tail (untrimmed test-set):**
+
+| Model | Feature Set | Target | R^2 | MAE | RMSE | MdAPE | 
+|---|---|---|---|---|---|---|
+| **LightGBM** (B-tuned+district-LOG) | tuned +District | Log | **0.8200** | $191,651 | $651,556 | 8.06% |
+| Ensemble (stack4-log) | tuned base models +District| Mixed | 0.8020 | $191,993 | $683,371 | 8.35% |
+| CatBoost (B-tuned) | tuned, native cats| Raw | 0.6224 | $220,118 | $943,799 | 8.87% |
+| XGBoost (B-tuned) | tuned | Raw | 0.5978 | $219,937 | $974,034 | 8.80% |
+| RandomForest (A+SchoolDistrict) | base +District | Raw | 0.5525 | $229,912 | $1,027,443 | 8.10% |
+| DecisionTree (C-leaf5) | base, constrained min_samples_leaf  | Raw | 0.5313 | $272,226 | $1,051,561 | 10.48% |
+| **LinearRegression (baseline)** | Base | Raw | 0.5226 | $309,885 | $1,061,299 | 16.01% |
+
+Full direct results export of all models saved to .../results/*.
 
 ## Instructions (full project)
 ### Environment/Set Up
