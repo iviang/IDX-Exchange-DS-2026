@@ -1,23 +1,17 @@
-﻿# IDX-Exchange-DS-2026
-IDX Exchange 2026 Data Science Internship Project
+# Predicting California Property Close Price (Final Sales)
+This repository contains Python code for data preprocessing, model development, evaluation, and prediction of the ClosePrice of single-family residential properties in California. Documentation is included to explain the methodology, assumptions, and decisions made throughout the analysis process.
+The workflow is organized into notebooks that inform a deployed Streamlit app built through a separate repository (most recent version: <https://github.com/iviang/IDX-DS26-streamlit-v3>). App is deployed at: <https://idx-ds26-app-v3-o8iv5baqvzgg2rb99jfviw.streamlit.app/>
 
-## Author
-Vivian Nguyen (ds49)
+## Project Objective
+The formal task of this project is to develop a machine learning model to predict the close price of any single residential property (currently for sale or not for sale) in California based on its characteristics at the time of the query.
 
-## Project Prompt
-Predicting California Property Close Price (Final Sales)
-
-## Contents
+## Repository Contents
 - Data preprocessing scripts
 - Model development
 - Model training
 - Model evaluation
 - Price prediction
 - Project documentation
-
-## Description
-This repository contains Python code for data preprocessing, model development, evaluation, and prediction of the ClosePrice of single-family residential properties in California. Documentation is included to explain the methodology, assumptions, and decisions made throughout the analysis process.
-The workflow is organized into notebooks that inform a deployed Streamlit app built through a separate repository (most recent version: <https://github.com/iviang/IDX-DS26-streamlit-v3>). App is deployed at: <https://idx-ds26-app-v3-o8iv5baqvzgg2rb99jfviw.streamlit.app/>
 
 | Notebook | Purpose |
 |---|---|
@@ -132,21 +126,6 @@ Notebooks must be run one by one, in complete order to create the correct artifa
 6. `06_evaluation.ipynb` — full metric suite; writes `results/metrics_summary.csv` and exports the deployment bundle **`models/models.pkl`**.
 
 Use "Restart & Run All" for each notebook so the results log reflects the latest run.
-  
-### 3. Re-run the analysis
-
-Run the notebooks **in order** — each depends on artifacts from the previous:
-
-1. `01_exploration.ipynb` — EDA (optional to re-run; no artifacts required downstream).
-2. `02_preprocessing.ipynb` — writes the cleaned CSV to `data/`.
-3. `03_baseline_model.ipynb` — Linear Regression; seeds `results/model_results.csv`.
-4. `04_model_comparison.ipynb` — Decision Tree + Random Forest.
-5. `05_advanced_models.ipynb` — LightGBM / XGBoost / CatBoost + ensembles; writes model bundles
-   to `models/`.
-6. `06_evaluation.ipynb` — full metric suite + log-target experiment; writes
-   `results/metrics_summary.csv` and exports the deployment bundle **`models/models.pkl`**.
-
-Use "Restart & Run All" for each notebook so the results log reflects the latest run.
 
 ## App Deployment (Streamlit)
 The most recent variation of the App is deployed at: <https://idx-ds26-app-v3-o8iv5baqvzgg2rb99jfviw.streamlit.app/>
@@ -175,3 +154,6 @@ User can input property details and features:
 - **v2** — user enters an address; geocoding + a saved KMeans model derive the location features.
 - **v3 (current)** — a **router**: it takes a ballpark estimate and switches (not blends) between the two best models of this repository: **Ridge stack** for the mid-market (ballpark ≤ $6.3M) and **LightGBM-log** for the luxury tail (ballpark > $6.3M).
 
+## Author
+Vivian Nguyen (ds49)
+Data Scientist Intern DS49 IDX Exchange
