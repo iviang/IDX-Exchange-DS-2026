@@ -1,4 +1,4 @@
 data/
 *.tsv
-catboost_info/*
+catboost_info/
 models/*
