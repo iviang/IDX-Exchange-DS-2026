@@ -21,7 +21,6 @@ week,model,version,target,train_months,test_month,n_features,train_r2,test_r2,ch
 7,XGBoost,B-tuned+district,raw(ClosePrice),11,2026-06,1547,0.9564,0.9008,tuned params on og+district (ablation best config)
 7,Ensemble,blend-tuned,raw(ClosePrice),11,2026-06,1547,0.9465,0.9043,"weighted blend (lgb,xgb,cat)=(np.float64(0.35), np.float64(0.25), np.float64(0.4)) on +district, weights fit on May val only"
 7,Ensemble,stack-ridge,raw(ClosePrice),11,2026-06,1547,0.946,0.9064,"Ridge meta on May val preds, +district base, coefs=[0.358 0.267 0.412]"
-8,LightGBM,B-tuned+district-rawUNTRIM-control,raw(ClosePrice),11,2026-06,1547,0.9594,0.8464,CONTROL: raw target on untrimmed train; isolates train-trim effect from log-target effect
 8,LightGBM,B-tuned+district-LOG,log(ClosePrice),11,2026-06,1547,0.918,0.8787,LOG target on tuned feature_d config + fixes untrimmed luxury-tail collapse
 8,Ensemble,stack4-log,raw(ClosePrice),11,2026-06,1547,0.8929,0.8905,all in one model but fails due to overweighting
 8,LightGBM,B-tuned +district -control,raw(ClosePrice),11,2026-06,1547,0.9594,0.8464,CONTROL: raw target on untrimmed train; isolates train-trim effect from log-target effect
