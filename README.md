@@ -1,17 +1,14 @@
 # Predicting California Property Close Price (Final Sales)
 This repository contains Python code for data preprocessing, model development, evaluation, and prediction of the ClosePrice of single-family residential properties in California. Documentation is included to explain the methodology, assumptions, and decisions made throughout the analysis process.
-The workflow is organized into notebooks that inform a deployed Streamlit app built through a separate repository (most recent version: <https://github.com/iviang/IDX-DS26-streamlit-v3>). App is deployed at: <https://idx-ds26-app-v3-o8iv5baqvzgg2rb99jfviw.streamlit.app/>
+
+The workflow is organized into notebooks that inform a deployed Streamlit app built through a separate repository (most recent version: <https://github.com/iviang/IDX-DS26-streamlit-v3>). 
+
+App is deployed at: <https://idx-ds26-app-v3-o8iv5baqvzgg2rb99jfviw.streamlit.app/>
 
 ## Project Objective
 The formal task of this project is to develop a machine learning model to predict the close price of any single residential property (currently for sale or not for sale) in California based on its characteristics at the time of the query.
 
 ## Repository Contents
-- Data preprocessing scripts
-- Model development
-- Model training
-- Model evaluation
-- Price prediction
-- Project documentation
 
 | Notebook | Purpose |
 |---|---|
@@ -21,6 +18,48 @@ The formal task of this project is to develop a machine learning model to predic
 | `04_model_comparison.ipynb` | Decision Tree and Random Forest |
 | `05_advanced_models.ipynb` | LightGBM, XGBoost, CatBoost, and ensembles |
 | `06_evaluation.ipynb` | Full metric suite (R², MAE, RMSE, MAPE, MdAPE), log-target experiment, model export |
+
+```
+IDX-Exchange-DS-2026/
+|-- data/
+|   |-- cleaned_CRMLSSold*.csv (gitignored, produced by `02_preprocessing.ipynb`)
+|   |-- CRMLSSold*.csv (gitignored)
+|   |-- DistrictAreas2526_-284845464123469011.geojson
+|-- docs/
+|   |-- Week 1
+|   |   |-- Week_1_Deliverable.pdf
+|   |-- Week 2
+|   |-- Week 3
+|   |-- Week 4
+|   |-- Week 5
+|   |-- Week 6
+|   |-- Week 7
+|   |-- Week 8
+|   |-- Week 9
+|   |   |-- app_iterations
+|   |   |   |-- app_v1.py
+|   |   |   |-- app_v2.py
+|   |   |-- requirements.txt
+|-- notebooks/
+|   |-- `01_exploration.ipynb`
+|   |-- `02_preprocessing.ipynb`
+|   |-- `03_baseline_model.ipynb`
+|   |-- `04_model_comparison.ipynb`
+|   |-- `05_advanced_models.ipynb`
+|   |-- `06_evaluation.ipynb`
+|-- models/ 
+|   |-- models.pkl (gitignored, produced by `06_evaluation.ipynb`)
+|   |-- model.pkl (gitignored, produced by `06_evaluation.ipynb`)
+|-- results/ 
+|   |-- metrics_summary.csv
+|   |-- model_results.csv
+|-- .gitignore
+|-- README.md
+|-- requirements.txt
+
+```
+
+Note: docs/ contains progression notes throughout internship schedule as well as record of inactive iterations of streamlit deployment for accessible observation. 
 
 ## Dataset Source
 - **Data input**: from CRMLS data files, internally access through IDX Exchange FTP. All Data files are not committed to this repository and stored locally to a git-ignored /data folder.
@@ -32,15 +71,24 @@ The formal task of this project is to develop a machine learning model to predic
 
 ## Preprocessing
 Preprocessing is performed across all input CRMLSSold*.csv files in notebook: ../Deliverables/Week 3/**02_preprocesssing.ipynb**. The notebook outputs a cleaned CSV to a git-ignored /data folder stored locally.
-1. **Load & Filter**
-2. **Deduplication**
-3. **Implausible Values**
-4. **Missing Values**
-5. **Leakage prevention**
-6.  **Feature engineering (Week 6)**
-7.  **Encoding**
-8.  **Normalization**
-9.  **Chronological train/test split**
+
+1. **Load & Filter**: input and concatenate raw CRMLS data, filtered to Residential, SingleFamilyResidence, CA properties.
+2. **Deduplication**: keeps only the msot recent version of each ListingKey as sorted by CloseDate.
+3. **Implausible Values**: investigates and repairs unit-error prices and lot sizes where possible while dropping ambiguous cases.
+4. **Missing Values**: drops null values, standardizing boolean (Y/N) fields where missing values are recognized as "N", and imputation flags as needed.
+5. **Leakage prevention**: drops list-price fields, keeping only columns as necessary for modeling.
+6. **Feature engineering**: creation of additional features noted below to observe changes in accuracy for model judgement and spatial join of School District geographical layering.
+
+- Bed/Bath Ratio
+- Property Age
+- LotSizeAcres to LivingArea Ratio
+- LivingArea per Bedroom
+- Has Garage (Boolean)
+- Amenity Count
+
+7. **Encoding**: converts Boolean fields to 0/1 and one-hots of CountyOrParish and SchoolDistrict.
+8. **Normalization**: applies log-transformations to right-skewed fields.
+9. **Chronological train/test split**: usees the most recent month in the dataset as test set, involving a tunable number of preceding months for training.
 
 ## Models Tested
 All models are scored in **dollar space** (log-target models are back-transformed with `np.exp` before scoring). Unless noted, test R^2 is on the 1/99-trimmed June test set and the baseline to beat is Linear Regression at **0.8152**. 
@@ -112,7 +160,14 @@ Full direct results export of all models saved to .../results/*.
 
 ## Instructions (full project)
 ### Environment/Set Up
-Notebooks requires Python 3.13.14. Install dependencies as commented in `Set Up` sections of each notebook.
+
+Notebooks requires Python 3.13.14. Install dependencies using the root `requirements.txt` in the project directory:
+
+```
+python3 -m pip install --upgrade pip
+python3 -m pip install -r requirements.txt
+``` 
+
 - Download a minimum of 6 months of `CRMLSSold*.csv` from the IDX Exchange FTP server into `data/` (credentials are in the internal task prompt; do not commit them or the raw data).
 - Download the [CA School District Areas 2025–26]<https://data.ca.gov/dataset/california-school-district-areas-2025-26> geoJSON into `data/` for the spatial-join feature.
 ### Run the notebooks
